@@ -1,0 +1,140 @@
+﻿package com.example.custom_listview;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class MainActivity extends AppCompatActivity {
+    ListView listView;
+    Context context;
+    EditText editName;
+    ArrayList<CountriesModel> countriesData;
+    CustomAdapter customAdapter;
+    CountriesModel countriesModel;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = this;
+        setContentView(R.layout.activity_main);
+        listView = findViewById(R.id.listView);
+        countriesData = new ArrayList<>();
+        //add Countries Data
+        populateCountriesData();
+        registerForContextMenu(listView);
+        customAdapter = new CustomAdapter(context,countriesData);
+        listView.setAdapter(customAdapter);
+    }
+
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.layout_context_menu,menu);
+        menu.setHeaderTitle("Select menu");
+        menu.setHeaderIcon(R.mipmap.ic_launcher);
+
+    }
+
+    private class ItemLongClickRemove implements AdapterView.OnItemLongClickListener{
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+            alertDialogBuilder.setMessage("Bán có muốn xóa sản phẩm này!");
+            alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    countriesData.remove(position);
+                    customAdapter.notifyDataSetChanged();
+                }
+            });
+            alertDialogBuilder.show();
+            return true;
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.add: {
+
+            }
+            break;
+            case R.id.edit: {
+
+                break;
+            }
+            case R.id.delete: {
+                listView.setOnItemLongClickListener(new ItemLongClickRemove());
+            }
+
+        }
+        return true;
+    }
+    private void populateCountriesData() {
+        //country 1
+        countriesModel = new CountriesModel();
+        countriesModel.setId(1);
+        countriesModel.setName("Phạm Tiến Long");
+        countriesModel.setImage(R.drawable.ic_launcher_background);
+        countriesModel.setArea("18T1");
+        countriesModel.setPopulation("203,382,058");
+        countriesData.add(countriesModel);
+
+        //country 2
+        countriesModel = new CountriesModel();
+        countriesModel.setId(2);
+        countriesModel.setName("Afghanistan");
+        countriesModel.setImage(R.drawable.ic_launcher_background);
+        countriesModel.setArea("652,090 km2");
+        countriesModel.setPopulation("25,500,100");
+        countriesData.add(countriesModel);
+
+        //country 3
+        countriesModel = new CountriesModel();
+        countriesModel.setId(1);
+        countriesModel.setName("India");
+        countriesModel.setImage(R.drawable.ic_launcher_background);
+        countriesModel.setArea("3,287,260 km2");
+        countriesModel.setPopulation("1,241,610,000");
+        countriesData.add(countriesModel);
+
+        //country 4
+        countriesModel = new CountriesModel();
+        countriesModel.setId(1);
+        countriesModel.setName("VietNam");
+        countriesModel.setImage(R.drawable.ic_launcher_background);
+        countriesModel.setArea("3,287,260 km2");
+        countriesModel.setPopulation("1,241,610,000");
+        countriesData.add(countriesModel);
+
+        //country 5
+        countriesModel = new CountriesModel();
+        countriesModel.setId(1);
+        countriesModel.setName("America");
+        countriesModel.setImage(R.drawable.ic_launcher_background);
+        countriesModel.setArea("3,287,260 km2");
+        countriesModel.setPopulation("1,241,610,000");
+        countriesData.add(countriesModel);
+
+    }
+
+
+}
